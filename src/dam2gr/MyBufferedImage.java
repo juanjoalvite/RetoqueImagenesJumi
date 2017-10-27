@@ -341,64 +341,46 @@ public class MyBufferedImage extends BufferedImage {
         }
     }
 
-
     // To-do tasca 1
     private void squareBright(byte[] dataRasterTarget) {
 
         int r, g, b;
+        int count = 1;
         int newR, newG, newB;
+        
+        int width = getWidth();
+        int height = getHeight();
 
+        int xInicial = (width - diSquareBrightDimension.width) / 2;
+        int xFinal = width + xInicial;
+        int yInicial = (height - diSquareBrightDimension.height) / 2;
+        int yFinal = height + yInicial;
 
-        int alto = baDataRasterOriginal.length / (this.getHeight() * 3);
-        int ancho = baDataRasterOriginal.length / (this.getWidth() * 3);
+        for (int i = xInicial; i < xFinal; i ++) {
+            for (int j = yInicial; j < yFinal; j ++) {
+                b = Byte.toUnsignedInt(baDataRasterOriginal[((width * j) + i) * 3]);
+                g = Byte.toUnsignedInt(baDataRasterOriginal[((width * j) + i) * 3 + 1]);
+                r = Byte.toUnsignedInt(baDataRasterOriginal[((width * j) + i) * 3 + 2]);
 
-        Byte[][] square = new Byte[ancho][alto];
+                newB = b + this.squareBright + this.squareBlueBright;
+                newG = g + this.squareBright + this.squareGreenBright;
+                newR = r + this.squareBright + this.squareRedBright;
 
-        int x = 0;
-        for (int i = 0; i < ancho; i++) {
-            for (int j = 0; j < alto; j++) {
-                square[i][j] = baDataRasterOriginal[x];
-                x++;
+                newB = (newB > 255 ? 255 : newB);
+                newB = (newB < 0 ? 0 : newB);
+                newG = (newG > 255 ? 255 : newG);
+                newG = (newG < 0 ? 0 : newG);
+                newR = (newR > 255 ? 255 : newR);
+                newR = (newR < 0 ? 0 : newR);
 
+                dataRasterTarget[((width * j) + i) * 3] = (byte) newB;
+                dataRasterTarget[((width * j) + i) * 3 + 1] = (byte) newG;
+                dataRasterTarget[((width * j) + i) * 3 + 2] = (byte) newR;
             }
-        }
-
-        int altura = (int) (square.length * this.getSquareSize() / 2);
-        int alturaCentro = square.length / 2;
-
-        int anchura = (int) (square[0].length * this.getSquareSize() / 2);
-        int anchuraCentro = square[0].length / 2;
-
-        for (int i = 0; i <= (square.length - 3); i += this.pixelLength) {
-            for(int j = 0; j <= (square[i].length - 3); j += this.pixelLength ){
-
-                if (i > anchuraCentro - anchura && i < anchuraCentro - anchura && j > alturaCentro - altura && j < alturaCentro - altura ) {
-
-                    b = Byte.toUnsignedInt(baDataRasterOriginal[i]);
-                    g = Byte.toUnsignedInt(baDataRasterOriginal[i + 1]);
-                    r = Byte.toUnsignedInt(baDataRasterOriginal[i + 2]);
-
-                    newB = b + this.squareBright + this.squareBlueBright;
-                    newG = g + this.squareBright + this.squareGreenBright;
-                    newR = r + this.squareBright + this.squareRedBright;
-
-                    newB = (newB > 255 ? 255 : newB);
-                    newB = (newB < 0 ? 0 : newB);
-                    newG = (newG > 255 ? 255 : newG);
-                    newG = (newG < 0 ? 0 : newG);
-                    newR = (newR > 255 ? 255 : newR);
-                    newR = (newR < 0 ? 0 : newR);
-
-                    dataRasterTarget[i] = (byte) newB;
-                    dataRasterTarget[i + 1] = (byte) newG;
-                    dataRasterTarget[i + 2] = (byte) newR;
-                }
-            }
-
         }
     }
 
-    // To-do tasca 1
+// To-do tasca 1
     private void squareGray(byte[] dataRasterTarget) {
 
         int r, g, b;
