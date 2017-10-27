@@ -5,14 +5,16 @@
  */
 package dam2gr;
 
+import javax.imageio.ImageIO;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 /**
- *
  * @author Jumi
  */
 public class MyBufferedImage extends BufferedImage {
@@ -340,13 +342,60 @@ public class MyBufferedImage extends BufferedImage {
 
 
     // To-do tasca 1
-    private void squareBright(byte[] dataRasterTarget) {
- 
+    private void squareBright(byte[] dataRasterTarget){
+
+        int r, g, b;
+        int newR, newG, newB;
+
+        float tamaño = baDataRasterOriginal.length * this.getSquareSize() / 2;
+        int centro = baDataRasterOriginal.length / 2;
+        
+        for (int i = 0; i <= (baDataRasterOriginal.length - 3); i += this.pixelLength) {
+            if(i > centro - tamaño && i < centro + tamaño){
+                b = Byte.toUnsignedInt(baDataRasterOriginal[i]);
+                g = Byte.toUnsignedInt(baDataRasterOriginal[i + 1]);
+                r = Byte.toUnsignedInt(baDataRasterOriginal[i + 2]);
+
+                newB = b + this.squareBright + this.squareBlueBright;
+                newG = g + this.squareBright + this.squareGreenBright;
+                newR = r + this.squareBright + this.squareRedBright;
+
+                newB = (newB > 255 ? 255 : newB);
+                newB = (newB < 0 ? 0 : newB);
+                newG = (newG > 255 ? 255 : newG);
+                newG = (newG < 0 ? 0 : newG);
+                newR = (newR > 255 ? 255 : newR);
+                newR = (newR < 0 ? 0 : newR);
+
+                dataRasterTarget[i] = (byte) newB;
+                dataRasterTarget[i + 1] = (byte) newG;
+                dataRasterTarget[i + 2] = (byte) newR;
+            }
+
+        }
+
+
     }
 
     // To-do tasca 1
     private void squareGray(byte[] dataRasterTarget) {
 
-    }
+        int r, g, b;
+        byte newRGB;
 
+        this.gray = true;
+
+        for (int i = 0; i <= (dataRasterTarget.length - 3); i += this.pixelLength) {
+            r = Byte.toUnsignedInt(dataRasterTarget[i]);
+            g = Byte.toUnsignedInt(dataRasterTarget[i + 1]);
+            b = Byte.toUnsignedInt(dataRasterTarget[i + 2]);
+
+            newRGB = (byte) ((r + g + b) / 3);
+
+            dataRasterTarget[i] = newRGB;
+            dataRasterTarget[i + 1] = newRGB;
+            dataRasterTarget[i + 2] = newRGB;
+
+        }
+    }
 }
