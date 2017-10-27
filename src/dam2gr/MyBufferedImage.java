@@ -13,6 +13,7 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author Jumi
@@ -342,39 +343,59 @@ public class MyBufferedImage extends BufferedImage {
 
 
     // To-do tasca 1
-    private void squareBright(byte[] dataRasterTarget){
+    private void squareBright(byte[] dataRasterTarget) {
 
         int r, g, b;
         int newR, newG, newB;
 
-        float tamaño = baDataRasterOriginal.length * this.getSquareSize() / 2;
-        int centro = baDataRasterOriginal.length / 2;
-        
-        for (int i = 0; i <= (baDataRasterOriginal.length - 3); i += this.pixelLength) {
-            if(i > centro - tamaño && i < centro + tamaño){
-                b = Byte.toUnsignedInt(baDataRasterOriginal[i]);
-                g = Byte.toUnsignedInt(baDataRasterOriginal[i + 1]);
-                r = Byte.toUnsignedInt(baDataRasterOriginal[i + 2]);
 
-                newB = b + this.squareBright + this.squareBlueBright;
-                newG = g + this.squareBright + this.squareGreenBright;
-                newR = r + this.squareBright + this.squareRedBright;
+        int alto = baDataRasterOriginal.length / (this.getHeight() * 3);
+        int ancho = baDataRasterOriginal.length / (this.getWidth() * 3);
 
-                newB = (newB > 255 ? 255 : newB);
-                newB = (newB < 0 ? 0 : newB);
-                newG = (newG > 255 ? 255 : newG);
-                newG = (newG < 0 ? 0 : newG);
-                newR = (newR > 255 ? 255 : newR);
-                newR = (newR < 0 ? 0 : newR);
+        Byte[][] square = new Byte[ancho][alto];
 
-                dataRasterTarget[i] = (byte) newB;
-                dataRasterTarget[i + 1] = (byte) newG;
-                dataRasterTarget[i + 2] = (byte) newR;
+        int x = 0;
+        for (int i = 0; i < ancho; i++) {
+            for (int j = 0; j < alto; j++) {
+                square[i][j] = baDataRasterOriginal[x];
+                x++;
+
+            }
+        }
+
+        int altura = (int) (square.length * this.getSquareSize() / 2);
+        int alturaCentro = square.length / 2;
+
+        int anchura = (int) (square[0].length * this.getSquareSize() / 2);
+        int anchuraCentro = square[0].length / 2;
+
+        for (int i = 0; i <= (square.length - 3); i += this.pixelLength) {
+            for(int j = 0; j <= (square[i].length - 3); j += this.pixelLength ){
+
+                if (i > anchuraCentro - anchura && i < anchuraCentro - anchura && j > alturaCentro - altura && j < alturaCentro - altura ) {
+
+                    b = Byte.toUnsignedInt(baDataRasterOriginal[i]);
+                    g = Byte.toUnsignedInt(baDataRasterOriginal[i + 1]);
+                    r = Byte.toUnsignedInt(baDataRasterOriginal[i + 2]);
+
+                    newB = b + this.squareBright + this.squareBlueBright;
+                    newG = g + this.squareBright + this.squareGreenBright;
+                    newR = r + this.squareBright + this.squareRedBright;
+
+                    newB = (newB > 255 ? 255 : newB);
+                    newB = (newB < 0 ? 0 : newB);
+                    newG = (newG > 255 ? 255 : newG);
+                    newG = (newG < 0 ? 0 : newG);
+                    newR = (newR > 255 ? 255 : newR);
+                    newR = (newR < 0 ? 0 : newR);
+
+                    dataRasterTarget[i] = (byte) newB;
+                    dataRasterTarget[i + 1] = (byte) newG;
+                    dataRasterTarget[i + 2] = (byte) newR;
+                }
             }
 
         }
-
-
     }
 
     // To-do tasca 1
