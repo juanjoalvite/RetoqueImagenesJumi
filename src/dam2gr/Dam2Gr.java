@@ -547,6 +547,8 @@ public class Dam2Gr
 
                 break;
             case "Recuadro":
+                this.selectZone(this.getSelectedImage(), this.getSelectedZone());
+                break;
             case "Todo":
                 this.selectZone(this.getSelectedImage(), this.getSelectedZone());
                 break;
@@ -593,7 +595,6 @@ public class Dam2Gr
                 break;
             case "Size":
                 this.viewer.setSquareDimension(sl.getValue(), getSelectedImage());
-                
                 break;
             default:
                 System.err.println("SLIDER Acción no tratada: " + e);

@@ -345,19 +345,20 @@ public class MyBufferedImage extends BufferedImage {
     private void squareBright(byte[] dataRasterTarget) {
 
         int r, g, b;
-        int count = 1;
         int newR, newG, newB;
-        
+
         int width = getWidth();
         int height = getHeight();
+        int sWidth = diSquareBrightDimension.width;
+        int sHeight = diSquareBrightDimension.height;
 
-        int xInicial = (width - diSquareBrightDimension.width) / 2;
-        int xFinal = width + xInicial;
-        int yInicial = (height - diSquareBrightDimension.height) / 2;
-        int yFinal = height + yInicial;
+        int xInicial = (width - sWidth) / 2;
+        int xFinal = sWidth + xInicial;
+        int yInicial = (height - sHeight) / 2;
+        int yFinal = sHeight + yInicial;
 
-        for (int i = xInicial; i < xFinal; i ++) {
-            for (int j = yInicial; j < yFinal; j ++) {
+        for (int i = xInicial; i < xFinal; i++) {
+            for (int j = yInicial; j < yFinal; j++) {
                 b = Byte.toUnsignedInt(baDataRasterOriginal[((width * j) + i) * 3]);
                 g = Byte.toUnsignedInt(baDataRasterOriginal[((width * j) + i) * 3 + 1]);
                 r = Byte.toUnsignedInt(baDataRasterOriginal[((width * j) + i) * 3 + 2]);
@@ -380,7 +381,7 @@ public class MyBufferedImage extends BufferedImage {
         }
     }
 
-// To-do tasca 1
+    // To-do tasca 1
     private void squareGray(byte[] dataRasterTarget) {
 
         int r, g, b;
@@ -388,17 +389,28 @@ public class MyBufferedImage extends BufferedImage {
 
         this.gray = true;
 
-        for (int i = 0; i <= (dataRasterTarget.length - 3); i += this.pixelLength) {
-            r = Byte.toUnsignedInt(dataRasterTarget[i]);
-            g = Byte.toUnsignedInt(dataRasterTarget[i + 1]);
-            b = Byte.toUnsignedInt(dataRasterTarget[i + 2]);
+        int width = getWidth();
+        int height = getHeight();
+        int sWidth = diSquareBrightDimension.width;
+        int sHeight = diSquareBrightDimension.height;
 
-            newRGB = (byte) ((r + g + b) / 3);
+        int xInicial = (width - sWidth) / 2;
+        int xFinal = sWidth + xInicial;
+        int yInicial = (height - sHeight) / 2;
+        int yFinal = sHeight + yInicial;
 
-            dataRasterTarget[i] = newRGB;
-            dataRasterTarget[i + 1] = newRGB;
-            dataRasterTarget[i + 2] = newRGB;
+        for (int i = xInicial; i < xFinal; i++) {
+            for (int j = yInicial; j < yFinal; j++) {
+                r = Byte.toUnsignedInt(dataRasterTarget[((width * j) + i) * 3]);
+                g = Byte.toUnsignedInt(dataRasterTarget[((width * j) + i) * 3 + 1]);
+                b = Byte.toUnsignedInt(dataRasterTarget[((width * j) + i) * 3 + 2]);
 
+                newRGB = (byte) ((r + g + b) / 3);
+
+                dataRasterTarget[((width * j) + i) * 3] = newRGB;
+                dataRasterTarget[((width * j) + i) * 3 + 1] = newRGB;
+                dataRasterTarget[((width * j) + i) * 3 + 2] = newRGB;
+            }
         }
     }
 }
